@@ -1,0 +1,21 @@
+#!/bin/bash
+# set cpufreq governor to powersave or performance, as specified
+
+if [ "$1" = "performance" ]
+then
+    sudo sed -i 's/powersave/performance/g' /etc/default/cpufrequtils
+    echo "CPU governor set to performance"
+    sudo /etc/init.d/cpufrequtils restart
+elif [ "$1" = "powersave" ]
+then
+    sudo sed -i 's/performance/powersave/g' /etc/default/cpufrequtils
+    echo "CPU governor set to powersave"
+    sudo /etc/init.d/cpufrequtils restart
+elif [ "$1" = "check" ]
+then
+    cpufreq-info
+else
+    sudo sed -i 's/performance/powersave/g' /etc/default/cpufrequtils
+    echo "No recognized parameter, resetting CPU governor to powersave"
+    sudo /etc/init.d/cpufrequtils restart
+fi

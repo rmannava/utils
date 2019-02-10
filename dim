@@ -1,0 +1,26 @@
+#!/bin/bash
+# set software brightness to the specified brightness using xrandr
+
+input_given=true
+# defaults to 100% brightness
+if [ -z "$1" ]
+then
+    input_given=false
+    brightness=1
+else
+    brightness=$1
+fi
+# find device name
+device=$(xrandr -q | grep "connected primary" | awk '{print $1}')
+echo "Modifying output device $device"
+# modify brightness
+xrandr --output $device  --brightness $brightness
+if $input_given
+then
+    # use bc for floating point multiplication
+    percentage=$(echo "$brightness * 100" | bc)
+    echo "Brightness set to $percentage%"
+else
+    # default case
+    echo "No parameter given, resetting brightness to 100%"
+fi

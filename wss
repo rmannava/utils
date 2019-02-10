@@ -1,0 +1,4 @@
+#!/bin/bash
+# silent wrapper for ws
+
+ws "$@" > /dev/null
