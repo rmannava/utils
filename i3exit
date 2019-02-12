@@ -1,0 +1,20 @@
+#!/bin/bash
+# shutdown options for i3
+
+case "$1" in
+    lock)
+        i3lock --color 0000
+        ;;
+    logout)
+        i3-msg exit
+        ;;
+    suspend)
+        i3lock --color 0000 && systemctl suspend
+        ;;
+    reboot)
+        systemctl reboot
+        ;;
+    poweroff)
+        systemctl poweroff
+        ;;
+esac
