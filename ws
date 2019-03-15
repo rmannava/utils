@@ -175,7 +175,7 @@ then
     echo ""
     echo "With no arguments, switches to workspace 0"
     echo ""
-    echo "add:    expects a name and a index; adds a mapping of name - index"
+    echo "add:    expects a name and an index; adds a mapping of name - index"
     echo "index:  expects a valid workspace index, giving priority to interpretation as a name; changes workspace to the given index"
     echo "list:   lists all name - index mappings"
     echo "name:   expects an existing workspace name; changes workspace to the corresponding index"

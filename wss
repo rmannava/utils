@@ -1,4 +1,12 @@
 #!/bin/bash
 # silent wrapper for ws
 
-ws "$@" > /dev/null
+if [[ "$1" = "help" ]]
+then
+    echo "Silent wrapper for ws"
+    echo "> ws help"
+    echo ""
+    ws "$1"
+else
+    ws "$@" > /dev/null
+fi
