@@ -1,7 +1,10 @@
 #!/bin/bash
 # checks ssh connection with server and sends a notification with notify-send when connection succeeds
 
+SERVER=localhost
 PORT=22
+SECRET=
+MESSAGE="server up"
 FORK=false
 
 # check server and send notification on success
