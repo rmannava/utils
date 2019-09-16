@@ -1,0 +1,59 @@
+#!/bin/bash
+# checks ssh connection with server and sends a notification with notify-send when connection succeeds
+
+PORT=22
+FORK=false
+
+# check server and send notification on success
+function check_server {
+    SERVER=$1
+    PORT=$2
+    SECRET=$3
+    MESSAGE=$4
+
+    # attempt login and exit
+    while ! $(sshpass -f $SECRET ssh $SERVER -p $PORT 'exit' > /dev/null 2>&1);
+        do :;
+    done
+
+    notify-send "$MESSAGE"
+}
+
+if [[ "$1" = "--help" ]]
+then
+    echo "Usage: sshcheck --server [server] --port [port] --secret [secret] --message [message]"
+    echo ""
+    echo "server:  ssh server"
+    echo "port:    ssh server port for connection"
+    echo "secret:  file containing ssh password"
+    echo "message: message to send on server connection"
+    echo ""
+fi
+
+# store options
+while [[ $# -gt 0 ]]
+do
+    opt="$1";
+    shift;
+    case "$opt" in
+        "--server" )
+            SERVER="$1"; shift;;
+        "--port" )
+            PORT="$1"; shift;;
+        "--secret" )
+            SECRET="$1"; shift;;
+        "--message" )
+            MESSAGE="$1"; shift;;
+        "--fork" )
+            FORK=true;;
+        *)
+    esac
+done
+
+# fork if needed
+if [[ $FORK = true ]]
+then
+    check_server "$SERVER" "$PORT" "$SECRET" "$MESSAGE" &
+else
+    check_server "$SERVER" "$PORT" "$SECRET" "$MESSAGE"
+fi
