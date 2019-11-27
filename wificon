@@ -1,0 +1,38 @@
+#!/bin/bash
+# creates a new connection for a given ssid with a given password using nmcli
+# updates the password if the connection already exists
+
+# returns the number of connections that match the given name
+function num_conns {
+    nmcli conn show | grep -e "\<$1\>" | wc -l
+}
+
+# creates a wifi connection of the given name
+function create_conn {
+    nmcli connection add type wifi con-name "$1" ifname wlp1s0 ssid "$1"
+}
+
+# sets the password of the given wifi connection
+function set_password {
+    nmcli conn modify "$1" wifi-sec.key-mgmt wpa-psk wifi-sec.psk "$2"
+}
+
+if [[ "$#" -eq 0 ]]
+then
+    nmcli conn show
+elif  [[ "$#" -eq 2 ]]
+then
+    NUM_CONNS=$(num_conns "$1")
+    if [[ $NUM_CONNS -eq 0 ]]
+    then
+        # nmcli will confirm connection creation
+        create_conn "$1"
+    fi
+    set_password "$1" "$2"
+    echo "Password for $1 set"
+else
+    echo "Usage: wificon [ssid] [password]"
+    echo ""
+    echo "ssid:     the name of the connection to create or update"
+    echo "password: the password for the specified ssid"
+fi
