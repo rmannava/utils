@@ -1,4 +1,0 @@
-#!/bin/bash
-# grep ps axu without the grep command appearing
-
-ps axu | grep "$1" | grep -v grep
