@@ -2,7 +2,7 @@
 # set current workspace by either workspace name or workspace number
 # makes no guarantees about successful switch (e.g. invalid index numbers)
 
-data=~/utils/ws_data/names
+data=~/utils/ws-data/names
 
 # lists all mappings
 function list {
