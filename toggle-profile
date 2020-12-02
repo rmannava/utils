@@ -1,0 +1,16 @@
+#!/bin/bash
+# toggles headphone audio profile
+
+NAME="bluez_card.70_BF_92_37_7A_6B"
+PROFILE_1="a2dp_sink"
+PROFILE_2="headset_head_unit"
+
+PROFILE=$(pacmd list-cards | grep 'active profile')
+
+if [[ "$PROFILE" == *"$PROFILE_1"* ]]
+then
+    pactl set-card-profile "$NAME" "$PROFILE_2"
+elif [[ "$PROFILE" == *"$PROFILE_2"* ]]
+then
+    pactl set-card-profile "$NAME" "$PROFILE_1"
+fi
