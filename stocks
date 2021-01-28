@@ -8,8 +8,8 @@ TOTAL=0
 while read ENTRY; do
     TICKER=$(echo $ENTRY | awk '{printf $1}')
     SHARES=$(echo $ENTRY | awk '{printf $2}')
-    # get current price from google
-    PRICE=$(curl -s "https://www.google.com/finance/quote/$TICKER?hl-en" | grep -Eo "YMlKec fxKbKc.{0,11}" | grep -Eo "[0-9]+([.][0-9]+)?" | tr "\n" " " | awk '{printf "%s\n", $NF}')
+    # get current price from yahoo
+    PRICE=$(curl -s "https://finance.yahoo.com/quote/$TICKER?ltr=1" | grep -Eo "data-reactid=\"50\">.{0,8}</span>" | grep -Eo "[0-9]+([.][0-9]+)?" | tr "\n" " " | awk '{printf "%s\n", $NF}')
     # running total
     TOTAL=$(echo "$TOTAL + $SHARES * $PRICE" | bc)
 done < $DATA
