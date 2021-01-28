@@ -1,0 +1,18 @@
+#!/bin/bash
+# prints total portfolio value from current stock price and number of shares
+
+DATA=~/utils/stocks-data/portfolio
+TOTAL=0
+
+# get tickers and number of shares
+while read ENTRY; do
+    TICKER=$(echo $ENTRY | awk '{printf $1}')
+    SHARES=$(echo $ENTRY | awk '{printf $2}')
+    # get current price from google
+    PRICE=$(curl -s "https://www.google.com/finance/quote/$TICKER?hl-en" | grep -Eo "YMlKec fxKbKc.{0,11}" | grep -Eo "[0-9]+([.][0-9]+)?" | tr "\n" " " | awk '{printf "%s\n", $NF}')
+    # running total
+    TOTAL=$(echo "$TOTAL + $SHARES * $PRICE" | bc)
+done < $DATA
+
+# format total
+echo $TOTAL | awk '{printf "$%'\''.2f\n", $1}'
