@@ -9,7 +9,7 @@ while read ENTRY; do
     TICKER=$(echo $ENTRY | awk '{printf $1}')
     SHARES=$(echo $ENTRY | awk '{printf $2}')
     # get current price from yahoo
-    PRICE=$(curl -s "https://finance.yahoo.com/quote/$TICKER?ltr=1" | grep -Eo "data-reactid=\"5(0|5)\">.{0,8}</span>" | grep -Eo "[0-9]+([.][0-9]+)?" | tr "\n" " " | awk '{printf "%s\n", $NF}')
+    PRICE=$(curl -s "https://finance.yahoo.com/quote/$TICKER?ltr=1" | grep -Eo "Trsdu\(0\.3s\) Fw\(b\) Fz\(36px\).{0,50}</span>" | grep -Eo ">.{0,8}<" | grep -Eo "[0-9]+([.][0-9]+)?" | tr "\n" " " | awk '{printf "%s\n", $NF}')
     echo "$TICKER $PRICE" | awk '{printf "%s $%'\''.2f\n", $1, $2}'
     # running total
     TOTAL=$(echo "$TOTAL + $SHARES * $PRICE" | bc)
