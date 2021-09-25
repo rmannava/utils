@@ -31,7 +31,7 @@ function add_item {
     fi
 
     ROW_NUMBER=$(grep -n "($2) $1" $DATA | awk '{printf "%d", $1}')
-    echo "Item in todo list at row $ROW_NUMBER"
+    echo "Item added to row $ROW_NUMBER"
     echo ""
     show_list
 }
