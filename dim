@@ -11,10 +11,10 @@ else
     brightness=$1
 fi
 # find device name
-device=$(xrandr -q | grep "connected primary" | awk '{print $1}')
+device=$(xrandr -q | grep "connected" | awk '{print $1}')
 echo "Modifying output device $device"
 # modify brightness
-xrandr --output $device  --brightness $brightness
+xrandr --output $device --brightness $brightness
 if $input_given
 then
     # use bc for floating point multiplication
