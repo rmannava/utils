@@ -1,0 +1,77 @@
+#!/bin/bash
+# keep track of a todo list with estimated time in hours
+
+DATA=~/utils/todo-data/todo
+TEMP=~/utils/todo-data/temp
+INTEGER_REGEX="^[0-9]+$"
+
+function print_usage {
+    echo "Usage: todo                   display the todo list"
+    echo "   or: todo -a [item] [time]  add an item to the todo list"
+    echo "   or: todo -r [index]        remove an item from the todo list"
+    echo ""
+    echo "Arguments:"
+    echo "   index:   an integer representing the row of the todo list to remove"
+    echo "   item:    a string describing an item in the todo list"
+    echo "   time:    an integer describing the number of hours a todo list item will take"
+}
+
+function show_list {
+    echo "TODO List"
+    grep -E "*" -nT $DATA
+}
+
+function add_item {
+    # only add the item if not already present
+    grep -q "($2) $1" $DATA
+    if [[ $? != 0 ]]
+    then
+        echo "($2) $1" >> $DATA
+        sort $DATA -bnk 1.2 -o $DATA
+    fi
+
+    ROW_NUMBER=$(grep -n "($2) $1" $DATA | awk '{printf "%d", $1}')
+    echo "Item in todo list at row $ROW_NUMBER"
+    echo ""
+    show_list
+}
+
+function remove_item {
+    # find the specified row
+    ROW=$(show_list | grep "$1:" | awk '{printf "%s", substr($0, index($0, "("))}')
+    # grep for every other row and overwrite data
+    grep -v "$ROW" $DATA > $TEMP
+    mv $TEMP $DATA
+    echo "Item removed from row $1: $ROW"
+    echo ""
+    show_list
+}
+
+if [[ -z "$1" ]] || [[ "$1" = "list" ]]
+then
+    show_list
+elif [[ "$1" = "-a" ]]
+then
+    if [[ -z "$2" ]] || [[ -z "$3" ]] || ! [[ "$3" =~ $INTEGER_REGEX ]]
+    then
+        echo "Incorrect arguments; expected [item] [time]"
+        echo ""
+        print_usage
+        exit
+    else
+        add_item "$2" "$3"
+    fi
+elif [[ "$1" = "-r" ]]
+then
+    if [[ -z "$2" ]] || ! [[ "$2" =~ $INTEGER_REGEX ]]
+    then
+        echo "Incorrect arguments; expected [index]"
+        echo ""
+        print_usage
+        exit
+    else
+        remove_item "$2"
+    fi
+else
+    print_usage
+fi
