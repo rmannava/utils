@@ -7,9 +7,14 @@ function num_conns {
     nmcli conn show | grep -e "\<$1\>" | wc -l
 }
 
+# gets wifi interface name
+function get_interface {
+    nmcli device show | grep -E "wifi$" -B 1 | grep -v wifi | sed -e 's/GENERAL.DEVICE:\s*//'
+}
+
 # creates a wifi connection of the given name
 function create_conn {
-    nmcli connection add type wifi con-name "$1" ifname wlp1s0 ssid "$1"
+    nmcli connection add type wifi con-name "$1" ifname $(get_interface) ssid "$1"
 }
 
 # sets the password of the given wifi connection
