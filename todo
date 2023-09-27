@@ -18,7 +18,7 @@ function print_usage {
 
 function show_list {
     echo "TODO List"
-    grep -E "*" -nT $DATA
+    grep -E "*" -nT $DATA 2>/dev/null
 }
 
 function add_item {
